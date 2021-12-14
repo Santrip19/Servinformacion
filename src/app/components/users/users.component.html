@@ -1,0 +1,69 @@
+<app-toolbar titulo="prueba tecnica Users"></app-toolbar>
+
+ <mat-card>
+     <mat-card-content>
+        <h1>Search users github</h1>
+        <form [formGroup]="formUser" (ngSubmit)="onSearch()" >
+        <mat-form-field class="fluid-width-input">
+          <input type="text" matInput 
+          placeholder="user"
+          formControlName="username"
+          required>
+          <mat-error >
+            <!-- {{userForm.getErrorMessage('username')}} -->
+          </mat-error>
+        </mat-form-field>
+
+         <button class="button-auth"  type="submit" 
+          [disabled]="formUser.invalid || this.formUser.value.username == 'gcpglobal'" color="primary">
+          Search
+         </button>
+        <br><br>
+      </form>
+      </mat-card-content>
+  
+  </mat-card>
+  
+  
+  
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" >
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+   
+        <!-- Id Column -->
+        <ng-container matColumnDef="position"  >
+          <th mat-header-cell *matHeaderCellDef > Id. </th>
+          <td  mat-cell *matCellDef="let element" (click)="imprimir($event, element.login)"> {{element.id}} </td>
+        </ng-container>
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element" (click)="imprimir($event, element.login)"> {{element.login}} </td>
+        </ng-container>
+        <!-- Name Column -->
+        <ng-container matColumnDef="perfil">
+            <th mat-header-cell *matHeaderCellDef> Perfil </th>
+            <td mat-cell *matCellDef="let element" (click)="imprimir($event, element.login)"> <img class="avatar" mat-card-avatar src="{{element.avatar_url}}" alt="User Avatar"> </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table><br>
+      
+      <h1>Followers</h1>
+
+      <ngx-charts-bar-vertical 
+    [view]="[1000,400]"
+    [results]="saleData"
+    [xAxisLabel]="'Usuarios'"
+    [legendTitle]="'Usuarios'"
+    [yAxisLabel]="'Cantidad'"
+    [legend]="true"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    [xAxis]="true"
+    [yAxis]="true"
+    [gradient]="true">
+</ngx-charts-bar-vertical>
+
+
+      

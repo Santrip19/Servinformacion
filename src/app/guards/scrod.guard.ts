@@ -1,0 +1,1 @@
+// Ningun parametro llamado score para poder crear el guard

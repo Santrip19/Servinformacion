@@ -1,0 +1,25 @@
+<app-toolbar titulo="prueba tecnica user"></app-toolbar>
+
+<div>
+<mat-card>
+<mat-grid-list cols="2" rowHeight="2:1">
+    <mat-grid-tile> <span> <p class="name">{{user.login}} </p> 
+        <br>name: {{user.name}} <br>
+        <br>location : {{user.location}} <br>
+       Url :<a href="{{user.html_url}}"> {{user.url}}</a> 
+    </span> 
+    </mat-grid-tile>
+    <mat-grid-tile> <img class="avatar_perfil" mat-card-avatar src="{{user.avatar_url}}" alt="User Avatar"></mat-grid-tile>
+  </mat-grid-list>
+  <br> 
+  <h4>
+      Biografia:
+  </h4>
+   <br>
+  <p>
+       {{user.bio}}
+  </p>
+</mat-card>
+
+
+</div>
