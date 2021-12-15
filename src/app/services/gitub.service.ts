@@ -11,7 +11,7 @@ export class GitubService {
 
   constructor(private http : HttpClient) { }
 
-  getUsers(name: string, longitud:number):Observable<any> {
+  getUsers(name: string, longitud:number) {
     return this.http.get<any>(`${environment.URL_API}?q=${name}&per_page=${longitud}`)
   }
 

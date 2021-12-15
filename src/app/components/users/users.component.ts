@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { GitubService } from '../../services/gitub.service';
 import { userResponse, User } from '../../models/user.model';
 import { Router } from '@angular/router';
+import { concatMap, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -11,11 +12,12 @@ import { Router } from '@angular/router';
 })
 export class UsersComponent implements OnInit {
   saleData = [
-    { name: '', value: 0 }
+    { name: '', followers: 0 }
   ]; 
 
   displayedColumns: string[] = ['position', 'name', 'perfil'];
   dataSource = [];
+  data: readonly any[]=[];
   constructor(
     private gitService : GitubService, 
     private fb : FormBuilder,
@@ -29,20 +31,29 @@ export class UsersComponent implements OnInit {
   }
    onSearch(){
     const user = this.formUser.value.username;
-    this.gitService.getUsers(user, 10).subscribe(res=>{
-      this.dataSource = res.items
-      //grafico
-      this.saleData = []
-      let array:any[] = res.items 
-      array.forEach(element => {
-        this.gitService.getUserByLogin(element.login).subscribe(res=>{
-          this.saleData.push( {name: res.login, value : res.followers})
-          console.log(this.saleData);
-        })
-      });
+    this.gitService.getUsers(user, 10 ).pipe(
+      concatMap((res)=>{
+        this.dataSource = res.items;
+        return forkJoin(...res.items.map((element: { login: string | null; })=>{
+          return this.gitService.getUserByLogin(element.login);
+        }));
+      })
+    ).subscribe((arrayGr)=>{
+      this.data = arrayGr 
+      for (let obj of this.data) {
+        obj['value'] = obj['followers'];
+        delete obj['followers'];
+    }
     })
+   
+    
   }
+
+
+
+
   imprimir(ev: any, item:string){
+   
     this.gitService.getUserByLogin(item).subscribe(res=>{
       this.router.navigate([`/user/${item}`])
     })
